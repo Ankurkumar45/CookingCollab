@@ -1,0 +1,15 @@
+.password-mode{
+  padding: 4px;
+  border: rgb(212, 214, 214) solid 1px;
+  border-left: none;
+  background: none;
+  border-radius: 5px;
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
