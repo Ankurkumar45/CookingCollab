@@ -16,7 +16,7 @@ const Navbar = () => {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {navLists.map((item, index) => (
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href={`# ${item.toLowerCase()}`}>
+                  <a className="nav-link active" aria-current="page" href={`/${item.toLowerCase()}`}>
                     {item}
                   </a>
                 </li>

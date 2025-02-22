@@ -8,6 +8,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ShareRecipe from './pages/ShareRecipe';
 import Dashboard from './components/Dashboard';
+import About from './pages/About';
+import Recipes from './pages/Recipes';
+import Contact from './pages/Contact';
 
 function App() {
 
@@ -28,6 +31,9 @@ function App() {
         <Route path='/share-your-recipe' element={<ShareRecipe setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/home' element={<Home />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/about' element={<About />} />
+        <Route path="/recipes" element={<Recipes />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );
