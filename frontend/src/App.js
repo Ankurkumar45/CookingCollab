@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 // import Forms from './components/Forms';
@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ShareRecipe from './pages/ShareRecipe';
+import Dashboard from './components/Dashboard';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/share-your-recipe' element={<ShareRecipe setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/home' element={<Home />} />
+        <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
     </Router>
   );
