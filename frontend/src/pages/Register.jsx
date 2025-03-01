@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Register = ({ setIsLoggedIn }) => {
@@ -35,7 +36,7 @@ const Register = ({ setIsLoggedIn }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
@@ -43,26 +44,21 @@ const Register = ({ setIsLoggedIn }) => {
       return;
     }
 
-    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    if (existingUsers.some(user => user.email === formData.email)) {
-      setError('Email already registered!');
-      return;
+    try {
+      const response = await axios.post('http://localhost:5000/api/register', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        image: formData.image
+      });
+
+      if (response.status === 201) {
+        setIsLoggedIn(true);
+        navigate('/login');
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || 'Registration failed');
     }
-
-    // Add new user
-    const newUser = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      image: formData.image
-    };
-
-    existingUsers.push(newUser);
-    localStorage.setItem('users', JSON.stringify(existingUsers));
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    setIsLoggedIn(true);
-    navigate('/home');
   };
 
   const passwordToggle = () => {
