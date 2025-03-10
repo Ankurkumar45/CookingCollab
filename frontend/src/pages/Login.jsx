@@ -17,16 +17,44 @@ const Login = ({ setIsLoggedIn }) => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      // Log the login attempt
+      console.log('Attempting login with email:', formData.email);
 
-      // Store token and user info in localStorage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email: formData.email.toLowerCase().trim(),
+        password: formData.password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-      setIsLoggedIn(true);
-      navigate('/dashboard');
+      // Log successful response
+      console.log('Login response:', response.status);
+
+      if (response.data && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        setIsLoggedIn(true);
+        navigate('/dashboard');
+      } else {
+        throw new Error('No token received');
+      }
     } catch (error) {
-      setError(error.response?.data?.message || 'Login failed');
+      // Detailed error logging
+      console.error('Login error:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+
+      if (error.response?.status === 401) {
+        setError('Email or password is incorrect');
+      } else if (error.response?.status === 400) {
+        setError(error.response.data.message || 'Invalid input');
+      } else {
+        setError('Server error. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }

@@ -24,6 +24,10 @@ const Register = ({ setIsLoggedIn }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (file && file.size > 5242880) {
+      setError('Image size should be less than 5MB');
+      return;
+    }
     const reader = new FileReader();
     reader.onloadend = () => {
       setFormData(prev => ({
@@ -38,7 +42,7 @@ const Register = ({ setIsLoggedIn }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match!');
       return;
@@ -57,6 +61,7 @@ const Register = ({ setIsLoggedIn }) => {
         navigate('/login');
       }
     } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
       setError(error.response?.data?.message || 'Registration failed');
     }
   };

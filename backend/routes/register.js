@@ -13,6 +13,13 @@ const validateUser = [
 
 router.post('/', validateUser, async (req, res) => {
   try {
+    console.log('Registration request received:', {
+      name: req.body.name,
+      email: req.body.email,
+      hasPassword: !!req.body.password,
+      hasImage: !!req.body.image
+    });
+
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -8,17 +8,29 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
         // Find user by email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: email.toLowerCase() });
+
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Verify password
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
+        // Compare password using bcrypt
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
+
+        // // Verify password
+        // const isValidPassword = await bcrypt.compare(password, user.password);
+        // if (!isValidPassword) {
+        //     return res.status(401).json({ message: 'Invalid email or password' });
+        // }
 
         // Generate JWT token
         const token = jwt.sign(
