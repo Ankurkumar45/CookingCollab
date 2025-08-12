@@ -40,7 +40,7 @@ A collaborative web app for food enthusiasts to share, discover, and cook recipe
    yarn start
    ```
 
-4. Visit `http://localhost:3000` in your browser.
+4. Visit `http://localhost:5000` in your browser.
 
 ## Usage
 
