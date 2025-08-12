@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 
@@ -13,11 +12,13 @@ const validateUser = [
 
 router.post('/', validateUser, async (req, res) => {
   try {
+    const { name, email, password, image } = req.body;
+
     console.log('Registration request received:', {
-      name: req.body.name,
-      email: req.body.email,
-      hasPassword: !!req.body.password,
-      hasImage: !!req.body.image
+      name,
+      email,
+      hasPassword: !!password,
+      hasImage: !!image
     });
 
     // Check for validation errors
@@ -26,23 +27,19 @@ router.post('/', validateUser, async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, image } = req.body;
+    const lowerCaseEmail = email.toLowerCase();
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: lowerCaseEmail });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create new user
+    // Let Mongoose handle password hashing via pre-save hook
     const user = new User({
       name,
-      email,
-      password: hashedPassword,
+      email: lowerCaseEmail,
+      password, // plain password, will be hashed by model
       image
     });
 

@@ -47,34 +47,34 @@ router.post('/login', async (req, res) => {
         const { email, password } = req.body;
 
         // Debug logging
-        console.log('Login attempt:', {
-            email,
-            passwordProvided: !!password
-        });
+        // console.log('Login attempt:', {
+        //     email,
+        //     passwordProvided: !!password
+        // });
 
         // Find user
         const user = await User.findOne({ email: email.toLowerCase() });
 
         // Debug logging
-        console.log('Database query result:', {
-            userFound: !!user,
-            userEmail: user?.email,
-            hasPassword: !!user?.password
-        });
+        // console.log('Database query result:', {
+        //     userFound: !!user,
+        //     userEmail: user?.email,
+        //     hasPassword: !!user?.password
+        // });
 
         if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({ message: 'User not found!' });
         }
 
         // Verify password
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         // Debug logging
-        console.log('Password validation:', {
-            isValid: isPasswordValid,
-            providedPassword: !!password,
-            storedPasswordHash: !!user.password
-        });
+        // console.log('Password validation:', {
+        //     isValid: isPasswordValid,
+        //     providedPassword: !!password,
+        //     storedPasswordHash: !!user.password
+        // });
 
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid email or password' });
@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
         // Generate JWT using the correct environment variable
         const token = jwt.sign(
             { userId: user._id },
-            process.env.JWT_SECRET, // Changed from JWT_SECRET_KEY
+            process.env.JWT_SECRET_KEY, // Changed from JWT_SECRET_KEY
             { expiresIn: '24h' }
         );
 

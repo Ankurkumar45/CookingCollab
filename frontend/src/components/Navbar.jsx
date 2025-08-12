@@ -2,7 +2,7 @@ import React from 'react';
 
 const Navbar = () => {
 
-  const navLists = ['Home', 'About', 'Recipes', 'Contact'];
+  const navLists = ['Home', 'About', 'Recipes','Share Recipe', 'Contact'];
 
   return (
     <>

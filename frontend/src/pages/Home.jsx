@@ -59,24 +59,6 @@ const Home = () => {
             <div className="col-12 col-md-6 col-lg-4">
               <div className="card h-100">
                 <div className="card-body">
-                  <h5 className="card-title">Latest Recipes</h5>
-                  <p className="card-text">Discover our newest and most trending recipes shared by our community.</p>
-                  <button className="btn btn-outline-danger">View More</button>
-                </div>
-              </div>
-            </div>
-            <div className="col-12 col-md-6 col-lg-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h5 className="card-title">Popular Categories</h5>
-                  <p className="card-text">Browse through our most popular recipe categories.</p>
-                  <button className="btn btn-outline-danger">Explore</button>
-                </div>
-              </div>
-            </div>
-            <div className="col-12 col-md-6 col-lg-4">
-              <div className="card h-100">
-                <div className="card-body">
                   <h5 className="card-title">Share Your Recipe</h5>
                   <p className="card-text">Got a unique recipe? Share it with our community!</p>
                   <button 

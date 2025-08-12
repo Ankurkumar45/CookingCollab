@@ -8,38 +8,37 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Validate input
+        console.log('Login attempt for:', email);
+
+        // Check if both fields are provided
         if (!email || !password) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-        // Find user by email
+        // Find user by lowercase email
         const user = await User.findOne({ email: email.toLowerCase() });
+        console.log('User found:', !!user);
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Compare password using bcrypt
+        // Compare password
         const isMatch = await bcrypt.compare(password, user.password);
+        console.log('Password match:', isMatch);
+
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // // Verify password
-        // const isValidPassword = await bcrypt.compare(password, user.password);
-        // if (!isValidPassword) {
-        //     return res.status(401).json({ message: 'Invalid email or password' });
-        // }
-
-        // Generate JWT token
+        // Create JWT token
         const token = jwt.sign(
             { userId: user._id },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET_KEY, // Ensure this is set in your .env
             { expiresIn: '24h' }
         );
 
-        // Send response
+        // Respond with token and user info
         res.json({
             token,
             user: {
@@ -52,7 +51,10 @@ router.post('/login', async (req, res) => {
 
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({
+            message: 'Internal server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 

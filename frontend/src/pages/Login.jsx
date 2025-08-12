@@ -17,44 +17,27 @@ const Login = ({ setIsLoggedIn }) => {
     setError('');
 
     try {
-      // Log the login attempt
-      console.log('Attempting login with email:', formData.email);
-
       const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email: formData.email.toLowerCase().trim(),
+        email: formData.email.toLowerCase(),
         password: formData.password
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
       });
-
-      // Log successful response
-      console.log('Login response:', response.status);
 
       if (response.data && response.data.token) {
+        // Store auth data
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        // Update app state
         setIsLoggedIn(true);
+        
+        // Redirect to dashboard
         navigate('/dashboard');
-      } else {
-        throw new Error('No token received');
       }
     } catch (error) {
-      // Detailed error logging
-      console.error('Login error:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message
-      });
-
-      if (error.response?.status === 401) {
-        setError('Email or password is incorrect');
-      } else if (error.response?.status === 400) {
-        setError(error.response.data.message || 'Invalid input');
-      } else {
-        setError('Server error. Please try again later.');
-      }
+      setError(
+        error.response?.data?.message || 
+        'An error occurred during login. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
