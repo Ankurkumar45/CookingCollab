@@ -12,7 +12,7 @@ const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse justify-content-around" id="navbarTogglerDemo01">
-            <a className="navbar-brand" href="/">CookginCollabe</a>
+            <a className="navbar-brand" href="/">CookingCollab</a>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {navLists.map((item, index) => (
                 <li className="nav-item">

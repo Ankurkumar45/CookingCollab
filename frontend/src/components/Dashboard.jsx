@@ -23,7 +23,7 @@ const Dashboard = () => {
     const fetchUserData = async () => {
       try {
         // Fetch user profile data
-        const userResponse = await axios.get('http://localhost:5000/api/auth/profile', {
+        const userResponse = await axios.get('http://localhost:5000/api/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`
           }
