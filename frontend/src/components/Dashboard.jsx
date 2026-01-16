@@ -38,7 +38,7 @@ const Dashboard = () => {
         setRecipes(recipesResponse.data);
 
         // Fetch user stats
-        const statsResponse = await axios.get('http://localhost:5000/api/users/stats', {
+        const statsResponse = await axios.get('http://localhost:5000/api/recipes/user', {
           headers: {
             Authorization: `Bearer ${token}`
           }

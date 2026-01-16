@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { createRecipe, getAllRecipes, getUserRecipes, likeRecipe, commentToRecipe, deleteRecipe } = require('../controllers/recipeController');
+const { createRecipe, getAllRecipes, getUserRecipes, getRecipeById, likeRecipe, commentToRecipe, deleteRecipe, updateRecipe } = require('../controllers/recipeController');
 const { auth } = require('../middleware/authMiddleware');
 
 const multer = require('multer');
@@ -18,8 +18,10 @@ const upload = multer({ storage });
 router.post('/', auth, upload.single('image'), createRecipe);
 router.get('/', getAllRecipes);
 router.get('/user', auth, getUserRecipes);
+router.get('/:id', getRecipeById);
 router.post('/:id/like', auth, likeRecipe);
 router.post('/:id/comment', auth, commentToRecipe);
 router.delete('/:id', auth, deleteRecipe);
+router.put('/:id', auth, upload.single('image'), updateRecipe);
 
 module.exports = router;

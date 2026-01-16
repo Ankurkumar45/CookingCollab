@@ -1,8 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn }) => {
+  const navigate = useNavigate();
 
-  const navLists = ['Home', 'About', 'Recipes','Share Recipe', 'Contact'];
+  const navLists = ['Home', 'About', 'Recipes', 'Contact'];
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
 
   return (
     <>
@@ -22,16 +30,23 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-            <a
-              href="/login"
-              class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-            >
-              Login
-            </a>
-            <span class="link-warning link-offset-2 link-underline-opacity-25">/</span>
-            <a href="/register" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-              Register
-            </a>
+            {
+              isLoggedIn ? (
+                <div>
+                  <a className="btn btn-outline-light me-2" href="/dashboard" role="button">Dashboard</a>
+                  <button
+                    className="btn btn-outline-light"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <a className="btn btn-outline-light me-2" href="/login" role="button">Login</a>
+                  <a className="btn btn-outline-light" href="/register" role="button" onClick={logout}>Register</a>
+                </div>
+              )
+            }
           </div>
         </div>
       </nav>

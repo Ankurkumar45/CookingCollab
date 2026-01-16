@@ -11,13 +11,15 @@ import Dashboard from './components/Dashboard';
 import About from './pages/About';
 import Recipes from './pages/Recipes';
 import Contact from './pages/Contact';
+import EditRecipie from './pages/EditRecipie';
+import Protected from './components/Protected';
 
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem('usename');
+    const user = localStorage.getItem('username');
     setIsLoggedIn(!!user);
   }, []);
 
@@ -30,10 +32,15 @@ function App() {
         <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/share-your-recipe' element={<ShareRecipe setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/dashboard' element={
+          <Protected>
+            <Dashboard />
+          </Protected>
+        } />
         <Route path='/about' element={<About />} />
         <Route path="/recipes" element={<Recipes />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/edit-recipe/:id" element={<EditRecipie />} />
       </Routes>
     </Router>
   );

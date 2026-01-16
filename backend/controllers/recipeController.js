@@ -44,10 +44,24 @@ const getUserRecipes = async (req, res) => {
     try {
         const recipes = await Recipe.find({ user: req.userId })
             .sort({ createdAt: -1 }); // Latest first
-        res.json(recipes);
+        res.status(200).json(recipes);
     } catch (error) {
         console.error('Error fetching recipes:', error);
-        res.status(500).json({ message: 'Error fetching recipes' });
+        res.status(500).json({ message: 'Error fetching recipes', error: error.message });
+    }
+}
+
+const getRecipeById = async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.id)
+            .populate('user', 'name')
+            .populate('comments.user', 'name');
+        if (!recipe) {
+            return res.status(404).json({ message: 'Recipe not found' });
+        }
+        res.json(recipe);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching recipe' });
     }
 }
 
@@ -109,4 +123,38 @@ const deleteRecipe = async (req, res) => {
     }
 }
 
-module.exports = { createRecipe, getAllRecipes, getUserRecipes, likeRecipe, commentToRecipe, deleteRecipe };
+const updateRecipe = async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.id);
+        if (!recipe) {
+            return res.status(404).json({ message: 'Recipe not found' });
+        }
+
+        // Check if the user owns the recipe
+        if (recipe.user.toString() !== req.userId) {
+            return res.status(403).json({ message: 'Not authorized to update this recipe' });
+        }
+
+        const { title, image, description, ingredients, prerequisites } = req.body;
+        const updatedData = {
+            title: title || recipe.title,
+            image: image || recipe.image,
+            description: description || recipe.description,
+            ingredients: ingredients ? ingredients.split('\n').map(item => item.trim()).filter(Boolean) : recipe.ingredients,
+            prerequisites: prerequisites ? prerequisites.split('\n').map(item => item.trim()).filter(Boolean) : recipe.prerequisites
+        };
+
+        const updatedRecipe = await Recipe.findByIdAndUpdate(
+            req.params.id,
+            updatedData,
+            { new: true }
+        );
+
+        res.json({ message: 'Recipe updated successfully', recipe: updatedRecipe });
+    } catch (error) {
+        console.error('Error updating recipe:', error);
+        res.status(500).json({ message: 'Error updating recipe' });
+    }
+}
+
+module.exports = { createRecipe, getAllRecipes, getUserRecipes, getRecipeById, likeRecipe, commentToRecipe, deleteRecipe, updateRecipe };

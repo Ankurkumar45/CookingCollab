@@ -71,6 +71,22 @@ const Recipes = () => {
     }
   };
 
+  const getRecipeById = async (req, res) => {
+    try {
+      const recipe = await recipes.findById(req.params.id)
+        .populate('user', 'name')
+        .populate('comments.user', 'name');
+      if (!recipe) {
+        return res.status(404).json({ message: 'Recipe not found' });
+      }
+      res.json(recipe);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching recipe' });
+    }
+  };
+
+  console.log('RecipeID:', getRecipeById);
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center py-5">
