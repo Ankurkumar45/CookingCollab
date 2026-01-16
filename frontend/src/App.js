@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Protected from './components/Protected';
 import Register from './pages/Register';
 import ShareRecipe from './pages/ShareRecipe';
 import Dashboard from './components/Dashboard';
@@ -12,7 +13,7 @@ import About from './pages/About';
 import Recipes from './pages/Recipes';
 import Contact from './pages/Contact';
 import EditRecipie from './pages/EditRecipie';
-import Protected from './components/Protected';
+
 
 function App() {
 

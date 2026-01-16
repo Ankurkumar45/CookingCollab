@@ -121,7 +121,7 @@ const Recipes = () => {
               <div className="card-body">
                 <h5 className="card-title">{recipe.title}</h5>
                 <p className="card-text">{recipe.description}</p>
-                <p className="small text-muted">By {recipe.user.name}</p>
+                <p className="small text-muted">By {recipe.user?.name || 'Unknown'}</p>
 
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <button
@@ -147,7 +147,7 @@ const Recipes = () => {
                       {recipe.comments?.map((comment, index) => (
                         <div key={index} className="border-bottom mb-2 pb-2">
                           <p className="small mb-1">
-                            <strong>{comment.user.name}</strong>
+                            <strong>{comment.user?.name || 'Anonymous'}</strong>
                             <span className="text-muted ms-2">
                               {new Date(comment.createdAt).toLocaleDateString()}
                             </span>

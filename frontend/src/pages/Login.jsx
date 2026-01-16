@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -26,9 +26,6 @@ const Login = ({ setIsLoggedIn }) => {
         // Store auth data
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        
-        // Update app state
-        setIsLoggedIn(true);
         
         // Redirect to dashboard
         navigate('/dashboard');

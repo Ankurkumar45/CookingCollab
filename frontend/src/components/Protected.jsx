@@ -1,23 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Navigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import AuthContext from '../context/AuthContext';
 
 function Protected({ children }) {
-    return (
-        <>
-            <AuthContext.Consumer>
-                {({ user, loading }) => {
-                    if (loading) {
-                        return <div>Loading...</div>;
-                    }
-                    if (!user) {
-                        return <Navigate to="/login" />;
-                    }
-                    return children;
-                }}
-            </AuthContext.Consumer>
-        </>
-    );
-}
+    const {user, loading} = useContext(AuthContext);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
+
+    return children;
+}
 export default Protected;
