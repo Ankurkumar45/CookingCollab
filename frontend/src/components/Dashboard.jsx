@@ -23,14 +23,14 @@ const Dashboard = () => {
     const fetchUserData = async () => {
       try {
         // Fetch user profile data
-        const userResponse = await axios.get('http://localhost:5000/api/auth/me', {
+        const userResponse = await axios.get('https://cookingcollab.onrender.com/api/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         setUser(userResponse.data);
         // Fetch user's recipes
-        const recipesResponse = await axios.get('http://localhost:5000/api/recipes/user', {
+        const recipesResponse = await axios.get('https://cookingcollab.onrender.com/api/recipes/user', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -38,7 +38,7 @@ const Dashboard = () => {
         setRecipes(recipesResponse.data);
 
         // Fetch user stats
-        const statsResponse = await axios.get('http://localhost:5000/api/recipes/user', {
+        const statsResponse = await axios.get('https://cookingcollab.onrender.com/api/recipes/user', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -66,7 +66,7 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/recipes/${recipeId}`, {
+      await axios.delete(`https://cookingcollab.onrender.com/api/recipes/${recipeId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

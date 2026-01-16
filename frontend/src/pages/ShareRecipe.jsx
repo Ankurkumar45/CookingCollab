@@ -63,7 +63,7 @@ const ShareRecipe = () => {
             }
 
             const response = await axios.post(
-                'http://localhost:5000/api/recipes',
+                'https://cookingcollab.onrender.com/api/recipes',
                 recipeData,
                 {
                     headers: {

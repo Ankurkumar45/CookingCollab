@@ -16,7 +16,7 @@ const Recipes = () => {
 
   const fetchRecipes = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/recipes');
+      const response = await axios.get('https://cookingcollab.onrender.com/api/recipes');
       setRecipes(response.data);
     } catch (error) {
       setError('Failed to load recipes');
@@ -34,7 +34,7 @@ const Recipes = () => {
 
     try {
       await axios.post(
-        `http://localhost:5000/api/recipes/${recipeId}/like`,
+        `https://cookingcollab.onrender.com/api/recipes/${recipeId}/like`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -57,7 +57,7 @@ const Recipes = () => {
 
     try {
       await axios.post(
-        `http://localhost:5000/api/recipes/${recipeId}/comment`,
+        `https://cookingcollab.onrender.com/api/recipes/${recipeId}/comment`,
         { text: commentText },
         {
           headers: { Authorization: `Bearer ${token}` }

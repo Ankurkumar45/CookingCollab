@@ -27,7 +27,7 @@ function EditRecipie() {
 
         const fetchRecipe = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/recipes/${id}`, {
+                const response = await axios.get(`https://cookingcollab.onrender.com/api/recipes/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -88,7 +88,7 @@ function EditRecipie() {
             }
 
             await axios.put(
-                `http://localhost:5000/api/recipes/${id}`,
+                `https://cookingcollab.onrender.com/api/recipes/${id}`,
                 recipeData,
                 {
                     headers: {
