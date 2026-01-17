@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import poster_01 from '../assets/posters/poster-01.jpg';
 import poster_02 from '../assets/posters/poster-02.jpg';
 import ShareRecipe from './ShareRecipe';

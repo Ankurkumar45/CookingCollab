@@ -73,6 +73,9 @@ const ShareRecipe = () => {
                 }
             );
 
+            // Use response data
+            console.log('Recipe shared successfully:', response.data);
+            
             setSuccess(true);
             // Reset form
             setRecipeData({
