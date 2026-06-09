@@ -4,6 +4,7 @@ const Recipe = require('../models/Recipe');
 const createRecipe = async (req, res) => {
     try {
         const { title, image, description, ingredients, prerequisites } = req.body;
+        console.log('Received recipe data:', { title, image, description, ingredients, prerequisites });
 
         const newRecipe = new Recipe({
             title,

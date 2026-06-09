@@ -2,6 +2,24 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const generateToken = (user) => {
+    return jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_EXPIRES_IN || '24h'
+    });
+};
+
+const sendTokenResponse = (user, statusCode, res) => {
+    const token = generateToken(user._id);
+
+    user.password = undefined;
+
+    res.status(statusCode).json({
+        success: true,
+        message: 'Authentication successful',
+        token,
+        user
+    });
+}
 
 const register = async (req, res) => {
     try {
@@ -19,19 +37,20 @@ const register = async (req, res) => {
         }
 
         // Create new user
-        const user = new User({
+        const user = await User.create({
             name,
             email: email.toLowerCase(),
             password,
             image
         });
 
-        await user.save();
-
-        res.status(201).json({ message: 'User registered successfully' });
+        sendTokenResponse(user, 201, res);
     } catch (error) {
         console.error('Registration error:', error);
-        res.status(500).json({ message: 'Server error during registration' });
+        res.status(500).json({
+            success: false,
+            message: 'Server error during registration'
+        });
     }
 }
 
@@ -46,42 +65,51 @@ const login = async (req, res) => {
         const user = await User.findOne({ email }).select("+password");
 
         if (!user) {
-            return res.status(401).json({ message: 'User not found!' });
+            return res.status(401).json({
+                success: false,
+                message: 'User not found!'
+            });
         }
 
         // Check password
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid credentials!' });
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials!'
+            });
         }
 
         // Generate JWT using the correct environment variable
-        const token = jwt.sign(
-            { userId: user._id },
-            process.env.JWT_SECRET_KEY, // Changed from JWT_SECRET_KEY
-            { expiresIn: '24h' }
-        );
+        // const token = jwt.sign(
+        //     { userId: user._id },
+        //     process.env.JWT_SECRET_KEY, // Changed from JWT_SECRET_KEY
+        //     { expiresIn: '24h' }
+        // );
 
         // Send response
-        res.json({
-            message: 'Login successful',
-            token,
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                image: user.image
-            }
-        });
+        sendTokenResponse(user, 200, res);
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({
+            success: false,
             message: 'Server error during login',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+            name: user.name,
+            email: user.email,
+            image: user.image
         });
-    }
+    };
 }
+// } catch (error) {
+//     console.error('Login error:', error);
+//     res.status(500).json({
+//         success: false,
+//         message: 'Server error during login',
+//         error: process.env.NODE_ENV === 'development' ? error.message : undefined
+//     });
+// }
 
 const getMe = async (req, res) => {
     try {
@@ -89,7 +117,10 @@ const getMe = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.json(user);
+        res.json({
+            success: true,
+            user
+        });
     } catch (error) {
         console.error('Profile fetch error:', error);
         res.status(500).json({ message: 'Server error' });
